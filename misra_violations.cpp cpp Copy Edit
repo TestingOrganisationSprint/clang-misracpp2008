@@ -1,0 +1,87 @@
+#include <iostream>
+#include <cstdlib>  // For malloc (MISRA violation)
+#include <cstring>  // For strcpy (MISRA violation)
+
+using namespace std;
+
+// Rule 5-2-1: Identifiers should not rely on case sensitivity
+int Value = 10;
+int value = 20;  // MISRA violation: Identifiers differ only in case
+
+// Rule 7-1-1: Use of implicit conversions
+void implicit_conversion()
+{
+    int a = 5;
+    float b = a;  // MISRA violation: Implicit conversion from int to float
+    cout << "Implicit conversion result: " << b << endl;
+}
+
+// Rule 18-4-1: Dynamic memory allocation is not allowed
+void dynamic_allocation()
+{
+    int* ptr = (int*)malloc(sizeof(int) * 10);  // MISRA violation: Use of malloc
+    if (ptr != nullptr)
+    {
+        ptr[0] = 100;
+        cout << "Allocated memory value: " << ptr[0] << endl;
+    }
+    free(ptr);  // MISRA violation: Use of free() instead of delete
+}
+
+// Rule 5-0-15: Using C-style casts instead of static_cast or reinterpret_cast
+void c_style_cast()
+{
+    double num = 9.75;
+    int x = (int)num;  // MISRA violation: C-style cast
+    cout << "C-style cast result: " << x << endl;
+}
+
+// Rule 6-4-1: Loop counters should be constant
+void loop_counter_violation()
+{
+    int n;
+    cout << "Enter loop count: ";
+    cin >> n;
+    
+    for (int i = 0; i < n; i++)  // MISRA violation: Non-constant loop bound
+    {
+        cout << "Iteration: " << i << endl;
+    }
+}
+
+// Rule 14-7-1: Use of goto is forbidden
+void goto_violation()
+{
+    int x = 5;
+    if (x == 5)
+    {
+        goto ERROR_LABEL;  // MISRA violation: Use of goto
+    }
+    
+ERROR_LABEL:
+    cout << "Error occurred!" << endl;
+}
+
+// Rule 16-2-1: Functions should have a single return point
+int multiple_return_points(int val)
+{
+    if (val > 10)
+    {
+        return 1;  // MISRA violation: Multiple return points
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int main()
+{
+    implicit_conversion();
+    dynamic_allocation();
+    c_style_cast();
+    loop_counter_violation();
+    goto_violation();
+    cout << "Return check: " << multiple_return_points(15) << endl;
+    return 0;
+}
